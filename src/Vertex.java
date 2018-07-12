@@ -56,9 +56,16 @@ public class Vertex {
 	}
 	
 	/**
-	 * Gives the name of the vertex followed by a list of its neighbors
+	 * Gives the name of the vertex
 	 */
 	public String toString() {
+		return label;
+	}
+	
+	/**
+	 * Gives the name of the vertex followed by a list of its neighbors
+	 */
+	public String adjacentToString() {
 		String output = "";
 		output+= label + " [";
 		for(Vertex v: adjList) {

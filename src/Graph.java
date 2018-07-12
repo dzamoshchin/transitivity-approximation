@@ -1,6 +1,7 @@
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -80,6 +81,11 @@ public class Graph {
 	}
 	
 	
+	public Map<String, Vertex> getGraph() {
+		return map;
+	}
+	
+	
 	/**
 	 * Reads from the file of specified name and adds the
 	 * edges listed in the file.
@@ -108,19 +114,28 @@ public class Graph {
 	public String toString() {
 		String output = "Adjacency List:\n";
 		for(Vertex v: map.values()) { //traverse through the HashMap
-			output += v + "\n";
+			output += v.adjacentToString() + "\n";
 		}
+		
+		output += "\nSets of Vertices:\n";
+		
+		for(int i = 0; i < sets.size(); i++) {
+			output += "V" + i + " " + sets.get(i).toString();
+			output += "\n";
+		}
+		
 		return output;		
 	}
 	
 	/**
-	 * 
-	 * @param set
-	 * @return
+	 * Checks if a given set is independent (no two adjacent vertices)
+	 * @param set to check
+	 * @return if independent
 	 */
 	public static boolean isIndependentSet(List<Vertex> set) {
-		for(Vertex v: set) {
-			for(Vertex adjacent:	v.getAdjacent()) {
+		
+		for(Vertex v: set) { //for each vertex in set
+			for(Vertex adjacent:	v.getAdjacent()) {  //for each adjacent vertex of that vertex
 				if(set.contains(adjacent)) {
 					return false;
 				}
@@ -204,6 +219,11 @@ public class Graph {
 		} else {
 			return false;
 		}
+	}
+
+
+	public void setPartition(List<List<Vertex>> sets) {
+		this.sets = sets;
 	}
 	
 	
