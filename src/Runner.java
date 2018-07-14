@@ -34,7 +34,7 @@ public class Runner {
 						break;
 					} else {
 						g.setPartition(null);
-						return partSize;
+						return partSize - 1;
 					} 
 				}
 			}
@@ -43,7 +43,7 @@ public class Runner {
 	
 	
 	public static void main(String[] args) {
-		RandomGraph random = new RandomGraph(5);
+		RandomGraph random = new RandomGraph(10);
 		System.out.println("Transitivity Number: " + approximateTransitivity(random));
 		System.out.println(random.toGraph());
 		
