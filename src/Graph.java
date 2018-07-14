@@ -85,6 +85,11 @@ public class Graph {
 		return map;
 	}
 	
+	public List<List<Vertex>> getSets() {
+		return sets;
+	}
+
+	
 	
 	/**
 	 * Reads from the file of specified name and adds the
@@ -117,11 +122,13 @@ public class Graph {
 			output += v.adjacentToString() + "\n";
 		}
 		
-		output += "\nSets of Vertices:\n";
-		
-		for(int i = 0; i < sets.size(); i++) {
-			output += "V" + i + " " + sets.get(i).toString();
-			output += "\n";
+		if(sets != null && !sets.isEmpty()) {
+			output += "\nSets of Vertices:\n";
+			
+			for(int i = 0; i < sets.size(); i++) {
+				output += "V" + i + " " + sets.get(i).toString();
+				output += "\n";
+			}
 		}
 		
 		return output;		
@@ -133,7 +140,6 @@ public class Graph {
 	 * @return if independent
 	 */
 	public static boolean isIndependentSet(List<Vertex> set) {
-		
 		for(Vertex v: set) { //for each vertex in set
 			for(Vertex adjacent:	v.getAdjacent()) {  //for each adjacent vertex of that vertex
 				if(set.contains(adjacent)) {
