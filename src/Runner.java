@@ -17,8 +17,6 @@ public class Runner {
 					for(List<Vertex> set: g.getSets()) {
 						if(!set.isEmpty()) {
 							count++;
-						} else {
-							break;
 						}
 					}
 					if(count == partSize) {
