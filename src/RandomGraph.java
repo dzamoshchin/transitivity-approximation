@@ -2,7 +2,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * 
+ * RandomGraph generates a random graph object with any
+ * number of vertices and a partition of any size
  * @author Daniel Zamoshchin
  *
  */
@@ -15,11 +16,15 @@ public class RandomGraph {
 	List<List<Integer>> fullAdjList = new ArrayList<List<Integer>>();
 	
 	/*
-	 * Graph object representation
+	 * Graph object representation of RandomGraph
 	 */
 	Graph graphToCreate = new Graph();
 		
-
+	/**
+	 * Constructor for random vertices.
+	 * Two vertices have a 50% chance of being connected.
+	 * @param numOfVertices
+	 */
 	public RandomGraph(int numOfVertices) {
 		for(int i = 0; i < numOfVertices; i++) {
 			fullAdjList.add(new ArrayList<Integer>());
@@ -37,11 +42,14 @@ public class RandomGraph {
 		}
 	}
 	
-	
+	/**
+	 * Each vertex is assigned a random partition
+	 * @param size of partition
+	 */
 	public void getRandomPartition(int size) {
-		List<List<Vertex>> sets = new ArrayList<List<Vertex>>(); 
+		List<VertexSet> sets = new ArrayList<VertexSet>(); 
 		for(int i = 0; i < size; i++) {
-			sets.add(new ArrayList<Vertex>());
+			sets.add(new VertexSet());
 		}
 		for(Vertex v: graphToCreate.getGraph().values()) {
 			int random = (int) (Math.random() * size);
@@ -50,6 +58,11 @@ public class RandomGraph {
 		graphToCreate.setPartition(sets);
 	}
 	
+	
+	/**
+	 * After finished with random graph, give back graph
+	 * @return Graph object
+	 */
 	public Graph toGraph() {
 		return graphToCreate;
 	}

@@ -9,11 +9,16 @@ import java.util.Scanner;
 
 /**
  * Represents a simple, undirected graph
- * with the option to color containing sets of vertices.
+ * with the option to separate into sets of vertices (or color).
  * 
  * @author Daniel Zamoshchin
  */
-public class Graph {
+public class Graph implements Cloneable {
+	
+	/**
+	 * Number of vertices in the graph 
+	 **/
+	private int numVertices; 
 
 	/**
 	 * HashMap that stores all Vertices in the Graph 
@@ -21,9 +26,9 @@ public class Graph {
 	private Map<String, Vertex> map; 
 	
 	/**
-	 * List of Lists that stores all sets of Vertices in the Graph 
+	 * List of VertexSets that stores all sets of Vertices in the Graph 
 	 **/
-	private List<List<Vertex>> sets; 
+	private List<VertexSet> sets; 
 	
 	/**
 	 * Default constructor to create an empty set of Vertices
@@ -31,7 +36,10 @@ public class Graph {
 	public Graph() {
 		//initialize HashMaps
 		map = new HashMap<String, Vertex>(); 
-		sets = new ArrayList<List<Vertex>>();
+		sets = new ArrayList<VertexSet>();
+		
+		//empty graph has no vertices
+		numVertices = 0;
 	}
 	
 	/**
@@ -42,6 +50,8 @@ public class Graph {
 	public void addEdge(String firstLabel, String secondLabel) {
 		Vertex first = new Vertex(firstLabel);
 		Vertex second = new Vertex(secondLabel);
+		
+		numVertices+=2;
 		
 		//put the vertices into the map if they do not already exist
 		map.putIfAbsent(firstLabel, first); 
@@ -71,7 +81,7 @@ public class Graph {
 						set.add(map.get(v));
 
 					}
-					sets.add(set);
+					sets.add(new VertexSet(set));
 				}
 			}
 			reader.close();
@@ -80,16 +90,37 @@ public class Graph {
 		}
 	}
 	
-	
+	/**
+	 * Get the map object for graph
+	 * @return map representation of graph
+	 */
 	public Map<String, Vertex> getGraph() {
 		return map;
 	}
 	
-	public List<List<Vertex>> getSets() {
+	/**
+	 * Get the list of VertexSets
+	 * @return the partition of vertices
+	 */
+	public List<VertexSet> getPartition() {
 		return sets;
 	}
-
 	
+	/**
+	 * Get the number of vertices in the graph
+	 * @return number of vertices
+	 */
+	public int getNumVertices() {
+		return numVertices;
+	}
+
+	/**
+	 * Set the list of VertexSets
+	 * @param sets list of VertexSet objects
+	 */
+	public void setPartition(List<VertexSet> sets) {
+		this.sets = sets;
+	}
 	
 	/**
 	 * Reads from the file of specified name and adds the
@@ -139,10 +170,11 @@ public class Graph {
 	 * @param set to check
 	 * @return if independent
 	 */
-	public static boolean isIndependentSet(List<Vertex> set) {
-		for(Vertex v: set) { //for each vertex in set
-			for(Vertex adjacent:	v.getAdjacent()) {  //for each adjacent vertex of that vertex
-				if(set.contains(adjacent)) {
+	public static boolean isIndependentSet(VertexSet set) {
+		List<Vertex> list = set.getSet();
+		for(Vertex v: list) { //for each vertex in set
+			for(Vertex adjacent: v.getAdjacent()) {  //for each adjacent vertex of that vertex
+				if(list.contains(adjacent)) {
 					return false;
 				}
 			}
@@ -153,7 +185,7 @@ public class Graph {
 	/**
 	 * A domatic partition of a graph is when every set of vertices
 	 * is a dominating set
-	 * @return true if domatic partition
+	 * @return if domatic partition
 	 */
 	public boolean isDomaticPartition() {
 		boolean isDominating = true;
@@ -161,36 +193,39 @@ public class Graph {
 		//for each vertex in each set
 		
 		//for each set
-		for(List<Vertex> set: sets) {
-			
+		for(VertexSet set: sets) {
+			List<Vertex> list = set.getSet();
 			//for each vertex in set
 			List<Vertex> neighbors = new ArrayList<Vertex>();
-			for(Vertex v: set) {
+			for(Vertex v: list) {
 				for(Vertex adjacent: v.getAdjacent()) {
-					if(!neighbors.contains(adjacent) && !set.contains(adjacent)) {
+					if(!neighbors.contains(adjacent) && !list.contains(adjacent)) {
 						neighbors.add(adjacent);
 					}
 				}
 			}
 			
-			if(neighbors.size() + set.size() != map.size()) {
+			if(neighbors.size() + list.size() != map.size()) {
 				return false;
 			}
 		}
 		return isDominating;
 	}
 	
-	
+	/**
+	 * Determines if transitive partition where each set
+	 * dominates each successive set. 
+	 * @return if transitive partition
+	 */
 	public boolean isTransitivePartition() {
 		boolean isTransitive = true;
-		
-		//for each vertex in each set
-		
+				
 		//for each set
 		for(int i = 0; i < sets.size(); i++) {
-			List<Vertex> set = sets.get(i);
+			List<Vertex> set = sets.get(i).getSet();
+			//for each successive set
 			for(int j = i + 1; j < sets.size(); j++) {
-				List<Vertex> nextSet = sets.get(j);
+				List<Vertex> nextSet = sets.get(j).getSet();
 	
 				List<Vertex> neighbors = new ArrayList<Vertex>();
 				for(Vertex v: set) {
@@ -211,12 +246,13 @@ public class Graph {
 	
 	/**
 	 * Determines if Grundy coloring which
-	 * follows the transitive definition but with independent sets
-	 * @return true if Grundy coloring of graph
+	 * follows the transitive definition 
+	 * but every set is independent
+	 * @return if Grundy coloring of graph
 	 */
 	public boolean isGrundyColoring() {
 		if(this.isTransitivePartition()) {
-			for(List<Vertex> set: sets) {
+			for(VertexSet set: sets) {
 				if(!isIndependentSet(set)) {
 					return false;
 				}
@@ -226,24 +262,13 @@ public class Graph {
 			return false;
 		}
 	}
-
-
-	public void setPartition(List<List<Vertex>> sets) {
-		this.sets = sets;
+	
+	/**
+	 * Implements Cloneable to clone Graph object
+	 */
+	public Graph clone() throws CloneNotSupportedException {  
+		return (Graph) super.clone();
 	}
-	
-	
-//	public boolean isADominatingSet() {
-//		
-//	}
-//	
-//	
-//	public boolean isMinimalDominatingSet(List<Vertex> set) {
-//		for(Vertex v: set) {
-//			if
-//		}
-//		return false;
-//	}
 
 }
 
