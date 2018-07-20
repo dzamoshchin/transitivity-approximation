@@ -144,89 +144,90 @@ public class Analyze {
 	}
 	
 	public static void main(String[] args) {
-//		List<Integer> transitivityNumbers = new ArrayList<Integer>();
-//		List<Integer> grundyNumbers = new ArrayList<Integer>();
-//		List<Integer> domaticNumbers = new ArrayList<Integer>();
-//		final long startTime = System.currentTimeMillis();
-//		try {
-//			BufferedWriter writer = new BufferedWriter(new FileWriter("output.txt"));
-//			for(int i = 0; i < 100; i++) {
-//				int num = i+1;
-//				System.out.println("Graph #" + num);
-//				writer.write(String.valueOf(num));
-//				
-//				//Generate a random graph
-//				RandomGraph random = new RandomGraph(10);
-//				
-//				//Transitivity
-//				int t1 = approximateTransitivity(random);
-//				int t2 = approximateTransitivity(random);
-//				int t = -1;
-//				if(t1 == t2) {
-//					t = t1;
-//				} else {
-//					int max = t1 > t2 ? t1 : t2;
-//					t = max;
-//				}
-//				String transitivity = "Transitivity Number: " + t + "\n";
-//				writer.write(transitivity);
-//				writer.write(maxGraphTransitivity.toString());
-////				System.out.println(transitivity);
-//				transitivityNumbers.add(t);
-//				
-//				//Grundy Number
-//				int g1 = approximateGrundyNumber(random);
-//				int g2 = approximateGrundyNumber(random);
-//				int g = -1;
-//				if(g1 == g2) {
-//					g = g1;
-//				} else {
-//					int max = g1 > g2 ? g1 : g2;
-//					g = max;
-//				}
-//				String grundy = "Grundy Number: " + g + "\n";
-//				writer.write(grundy);
-//				writer.write(maxGraphGrundy.toString());
-////				System.out.println(grundy);
-//				grundyNumbers.add(g);
-//				
-//				//Domatic Number
-//				int d1 = approximateDomaticNumber(random);
-//				int d2 = approximateDomaticNumber(random);
-//				int d = -1;
-//				if(d1 == d2) {
-//					d = d1;
-//				} else {
-//					int max = d1 > d2 ? d1 : d2;
-//					d = max;
-//				}
-//				String domatic = "Domatic Number: " + d + "\n";
-//				writer.write(domatic);
-//				writer.write(maxGraphDomatic.toString());
-////				System.out.println(domatic);
-//				domaticNumbers.add(d);
-//				
-//				if(g>t || t-g >= 2) {
-//					System.out.println("ERROR AT " + num);
-//				}
-//				
-//				System.out.print("\n");
-//			}
-//			writer.write(transitivityNumbers.toString());
-//			writer.write(grundyNumbers.toString());
-//			writer.write(domaticNumbers.toString());
-//			System.out.println(transitivityNumbers);
-//			System.out.println(grundyNumbers);
-//			System.out.println(domaticNumbers);
-//			writer.close();
-//			final long endTime = System.currentTimeMillis();
-//			System.out.println("Total execution time: " + (endTime - startTime));
-//		} catch (IOException e) {
-//			System.out.println("The output file was not found. Error: " + e);
-//		}
-		
-		
-		calculateForGivenGraph("graph.txt");
+//		calculateForGivenGraph("graph.txt");
+	}
+	
+	public static void calculateForRandomGraph(int run) {
+		List<Integer> transitivityNumbers = new ArrayList<Integer>();
+		List<Integer> grundyNumbers = new ArrayList<Integer>();
+		List<Integer> domaticNumbers = new ArrayList<Integer>();
+		final long startTime = System.currentTimeMillis();
+		try {
+			BufferedWriter writer = new BufferedWriter(new FileWriter("output.txt"));
+			for(int i = 0; i < run; i++) {
+				int num = i+1;
+				System.out.println("Graph #" + num);
+				writer.write(String.valueOf(num));
+				
+				//Generate a random graph
+				RandomGraph random = new RandomGraph(10);
+				
+				//Transitivity
+				int t1 = approximateTransitivity(random);
+				int t2 = approximateTransitivity(random);
+				int t = -1;
+				if(t1 == t2) {
+					t = t1;
+				} else {
+					int max = t1 > t2 ? t1 : t2;
+					t = max;
+				}
+				String transitivity = "Transitivity Number: " + t + "\n";
+				writer.write(transitivity);
+				writer.write(maxGraphTransitivity.toString());
+//				System.out.println(transitivity);
+				transitivityNumbers.add(t);
+				
+				//Grundy Number
+				int g1 = approximateGrundyNumber(random);
+				int g2 = approximateGrundyNumber(random);
+				int g = -1;
+				if(g1 == g2) {
+					g = g1;
+				} else {
+					int max = g1 > g2 ? g1 : g2;
+					g = max;
+				}
+				String grundy = "Grundy Number: " + g + "\n";
+				writer.write(grundy);
+				writer.write(maxGraphGrundy.toString());
+//				System.out.println(grundy);
+				grundyNumbers.add(g);
+				
+				//Domatic Number
+				int d1 = approximateDomaticNumber(random);
+				int d2 = approximateDomaticNumber(random);
+				int d = -1;
+				if(d1 == d2) {
+					d = d1;
+				} else {
+					int max = d1 > d2 ? d1 : d2;
+					d = max;
+				}
+				String domatic = "Domatic Number: " + d + "\n";
+				writer.write(domatic);
+				writer.write(maxGraphDomatic.toString());
+//				System.out.println(domatic);
+				domaticNumbers.add(d);
+				
+				if(g>t || t-g >= 2) {
+					System.out.println("ERROR AT " + num);
+				}
+				
+				System.out.print("\n");
+			}
+			writer.write(transitivityNumbers.toString());
+			writer.write(grundyNumbers.toString());
+			writer.write(domaticNumbers.toString());
+			System.out.println(transitivityNumbers);
+			System.out.println(grundyNumbers);
+			System.out.println(domaticNumbers);
+			writer.close();
+			final long endTime = System.currentTimeMillis();
+			System.out.println("Total execution time: " + (endTime - startTime));
+		} catch (IOException e) {
+			System.out.println("The output file was not found. Error: " + e);
+		}
 	}
 	
 	public static void calculateForGivenGraph(String filename) {
