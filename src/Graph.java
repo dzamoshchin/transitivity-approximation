@@ -99,14 +99,6 @@ public class Graph implements Cloneable {
 	}
 	
 	/**
-	 * Get a RandomGraph from the Graph
-	 * @return RandomGraph object
-	 */
-	public RandomGraph getRandomGraph() {
-		return new RandomGraph(this);
-	}
-	
-	/**
 	 * Get the list of VertexSets
 	 * @return the partition of vertices
 	 */
