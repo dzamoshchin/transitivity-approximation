@@ -52,5 +52,16 @@ public class VertexSet {
 	public VertexSet(List<Vertex> set) {
 		this.set = set;
 	}
+	
+	/**
+	 * String representation of a VertexSet
+	 */
+	public String toString() {
+		String output="";
+		for(Vertex v: set) {
+			output+=v.toString() + " ";
+		}
+		return output;
+	}
 
 }
