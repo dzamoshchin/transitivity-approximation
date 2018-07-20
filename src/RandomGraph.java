@@ -1,5 +1,6 @@
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * RandomGraph generates a random graph object with any
@@ -40,6 +41,14 @@ public class RandomGraph {
 				}
 			}
 		}
+	}
+	
+	/**
+	 * Constructor to convert graph to random graph
+	 * @param graph graph to convert
+	 */
+	public RandomGraph(Graph graph) {
+		graphToCreate = graph;
 	}
 	
 	/**
